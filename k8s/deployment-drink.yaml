@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drink-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drink-app
+  template:
+    metadata:
+      labels:
+        app: drink-app
+    spec:
+      containers:
+      - name: drink-app
+        image: admekb/admekb_drink:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-password
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: admin-secret
+              key: admin-username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: admin-secret
+              key: admin-password
+        - name: TELEGRAM_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: telegram-secret
+              key: telegram-token
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: flask-secret
+              key: flask-secret-key
+        - name: DB_HOST
+          value: db  # Здесь указываем имя сервиса базы данных, которое будет разрешаться как хост
+        - name: DB_NAME
+          value: drink  # Имя базы данных
+        # readinessProbe:
+        #   httpGet:
+        #     path: /drink
+        #     port: 5000
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /drink
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20

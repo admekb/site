@@ -1,21 +1,38 @@
-<h1>Админка</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Напиток</th>
-            <th>Объем (л)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-            {% for drink in user.drinks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка</title>
+</head>
+<body>
+    <h1>Добро пожаловать, администратор</h1>
+    <h2>Список людей</h2>
+    
+    <!-- Проверка ошибки логина -->
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    
+    <table border="1">
+        <thead>
             <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ drink.drink_name }}</td>
-                <td>{{ drink.volume }}</td>
+                <th>Имя</th>
+                <th>Напиток</th>
+                <th>Объем (л)</th>
             </tr>
+        </thead>
+        <tbody>
+            {% for person in people %}
+                {% for drink in person.drinks %}
+                    <tr>
+                        <td>{{ person.name }}</td>
+                        <td>{{ drink.drink_name }}</td>  <!-- Используем drink_name -->
+                        <td>{{ drink.volume }}</td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</body>
+</html>

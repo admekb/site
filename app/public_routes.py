@@ -1,9 +1,11 @@
+import os
 from flask import Blueprint, render_template
-from app.models import User
+from app.models import People  # Заменили User на People
 
-public_bp = Blueprint('public', __name__)
+public_bp = Blueprint('public', __name__, url_prefix='/')
 
-@public_bp.route('/drink')
-def drink_table():
-    users = User.query.all()
-    return render_template('drink_table.html', users=users)
+@public_bp.route('/')
+def home():
+    return render_template('index.html')
+
+# Вы можете добавить другие маршруты, если необходимо

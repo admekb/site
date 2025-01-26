@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, render_template, redirect, url_for, session
-from app.models import db, User, Drink
+from app.models import db, People, Drink
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -13,15 +13,23 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['admin'] = True
             return redirect(url_for('admin.dashboard'))
-        return "Неверный логин или пароль", 401
+        
+        # Сообщение об ошибке
+        return render_template('login.html', error="Неверный логин или пароль"), 401
+    
     return render_template('login.html')
 
 @admin_bp.route('/dashboard')
 def dashboard():
     if not session.get('admin'):
         return redirect(url_for('admin.login'))
-    users = User.query.all()
-    return render_template('dashboard.html', users=users)
+    
+    # Получаем список всех людей из базы данных
+    people = People.query.all()
+    
+    # Делаем сбор данных о напитках для каждого человека
+    return render_template('dashboard.html', people=people)

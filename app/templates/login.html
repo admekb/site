@@ -4,4 +4,9 @@
     <label>Пароль</label>
     <input type="password" name="password" required>
     <button type="submit">Войти</button>
+
+    <!-- Сообщение об ошибке -->
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
 </form>
