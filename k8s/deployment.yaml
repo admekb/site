@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drink-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: drink-app
+  template:
+    metadata:
+      labels:
+        app: drink-app
+    spec:
+      containers:
+      - name: drink-app
+        image: drink-app:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: SQLALCHEMY_DATABASE_URI
+          value: "postgresql://user:password@db:5432/drink_db"
